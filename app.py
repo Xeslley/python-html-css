@@ -22,12 +22,14 @@ def antes_requisicao():
 
 
 @app.teardown_request
-def depois_request():
+def depois_request(exc):
     g.bd.close()
+
+@app.route("/")
+def exibir_entradas():
+    return render_template("exibir_entradas.html")
 
 
 @app.route("/hello")
 def pagina_inicial():
     return "Hello World"
-
-
