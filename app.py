@@ -1,5 +1,5 @@
 from flask import Flask, request, session, g, redirect, \
-    abort, render_template, flash
+    abort, render_template, flash, url_for
 import sqlite3
 
 # configuração
@@ -43,7 +43,9 @@ def pagina_inicial():
 
 @app.route("/inserir")
 def inserir_entrada():
-    sql = "INSERT INTO  ENTRADAS(TITULO, TEXTO) values ('Primeiro Post', 'Esse é post')"
-    g.bd.execute(sql)
+    if not session.get('logado'):
+        abort(401)
+    sql = "INSERT INTO  ENTRADAS(TITULO, TEXTO) values ( ?, ?)"
+    g.bd.execute(sql, request.form('campoTitulo'), request.form('campoTexto'))
     g.bd.commit()
-    return render_template("exibir_entradas.html")
+    return redirect(url_for("exibir_entradas"))
