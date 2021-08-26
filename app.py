@@ -40,3 +40,10 @@ def exibir_entradas():
 @app.route("/hello")
 def pagina_inicial():
     return "Hello World"
+
+@app.route("/inserir")
+def inserir_entrada():
+    sql = "INSERT INTO  ENTRADAS(TITULO, TEXTO) values ('Primeiro Post', 'Esse é post')"
+    g.bd.execute(sql)
+    g.bd.commit()
+    return render_template("exibir_entradas.html")
