@@ -26,8 +26,15 @@ def depois_request(exc):
     g.bd.close()
 
 @app.route("/")
+@app.route("/entradas")
 def exibir_entradas():
-    return render_template("exibir_entradas.html")
+    sql = "SELECT titulo, texto FROM entradas ORDER BY id DESC"
+    cur = g.bd.execute(sql)
+    entradas = []
+    for titulo, texto in cur.fetchall():
+        entradas.append({"titulo":titulo, "texto":texto})
+
+    return render_template("exibir_entradas.html", lista_entradas = entradas)
 
 
 @app.route("/hello")
